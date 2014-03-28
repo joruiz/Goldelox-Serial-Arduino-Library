@@ -10,11 +10,21 @@
 	#include "WProgram.h" // for Arduino 23
 #endif
 
-Goldelox_Serial_4DLib::Goldelox_Serial_4DLib(Stream * virtualPort) { 
-        _virtualPort = virtualPort; 
+Goldelox_Serial_4DLib::Goldelox_Serial_4DLib(Stream * virtualPort, uint8_t resetPin) { 
+    _virtualPort = virtualPort; 
 	_virtualPort->flush();
+	_resetPin = resetPin;
+	pinMode(_resetPin, OUTPUT);
+	digitalWrite(_resetPin, HIGH);
 }
 
+void Goldelox_Serial_4DLib::reset()
+{
+	digitalWrite(_resetPin, LOW);
+	delay(100);
+	digitalWrite(_resetPin, HIGH);
+	delay(3000);
+}
 //*********************************************************************************************//
 //**********************************Intrinsic 4D Routines**************************************//
 //*********************************************************************************************//

@@ -20,16 +20,16 @@
 /*                                                                                           */
 /*                   Define the serial port to use here, if using software serial set it to  */
 /*                   something like SerialS.                                                 */
-  #define DisplaySerial Serial
+  #define DisplaySerial SerialS
 /*                                                                                           */
 /*                   To use SoftwareSerial uncomment the following and set the pins you are  */
 /*                   using correctly                                                         */
-//#include <SoftwareSerial.h>
-//SoftwareSerial DisplaySerial(2,3) ; // pin 2 = TX of display, pin3 = RX
+#include <SoftwareSerial.h>
+SoftwareSerial DisplaySerial(3,4) ; // pin 2 = TX of display, pin3 = RX
 /*                                                                                           */
 /*                   If you are not using hardware serial on pins 0 and 1 you can use this   */
 /*                   hardware port for logging messages. To do this uncomment the following  */
-//#define LOG_MESSAGES
+#define LOG_MESSAGES
 /*                                                                                           */
 /*                   The 4Display Shield has its joystick connected directly to Arduino      */
 /*                   Digital pins 2-6. If you are using the 4D Arduino Adapter, and/or have  */
@@ -74,9 +74,9 @@
 
 #include "Goldelox_Serial_4DLib.h"
 #include "GoldeloxBigDemo.h" 
-#include "Goldelox_Const4D.h"
+#include "Goldelox_const4D.h"
 
-Goldelox_Serial_4DLib Display(&DisplaySerial);
+Goldelox_Serial_4DLib Display(&DisplaySerial, 5);
 
 // globals for this program
 int fmediatests ;
@@ -383,7 +383,7 @@ void text_Tests(void)
   Display.txt_FGcolour(WHITE) ;
   Display.txt_FontID(SYSTEM) ;
   Display.txt_MoveCursor(2, 0) ;
-  Display.putstr("Hello There") ;
+  Display.putstr("Hello Pingajo") ;
   
   Display.txt_MoveCursor(4, 1) ;
   Display.txt_Height(2) ;
@@ -512,6 +512,9 @@ void loop()
 {
   int i, rc ;
   char wks[20] ;
+  
+  Display.reset();
+  
   Display.TimeLimit4D   = 5000 ; // 2 second timeout on all commands
   Display.Callback4D = Callback ; // NULL ;
   DisplaySerial.begin(9600) ;

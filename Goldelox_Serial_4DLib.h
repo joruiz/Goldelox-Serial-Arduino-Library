@@ -25,10 +25,11 @@ typedef void (*Tcallback4D)(int, unsigned char);
 class Goldelox_Serial_4DLib
 {
 	public:
-		Goldelox_Serial_4DLib(Stream * virtualPort);
+		Goldelox_Serial_4DLib(Stream * virtualPort, uint8_t resetPin);
 		Tcallback4D Callback4D ;
 		
 		//Compound 4D Routines
+		void reset();
 		void blitComtoDisplay(word  X, word  Y, word  Width, word  Height, t4DByteArray  Pixels) ;
 		void gfx_BGcolour(word  Color) ;
 		void gfx_ChangeColour(word  OldColor, word  NewColor) ;
@@ -113,7 +114,8 @@ class Goldelox_Serial_4DLib
 									// or indeterminate (eg file_exec, file_run, file_callFunction) commands
 		
 	private:
-                Stream * _virtualPort;
+        Stream * _virtualPort;
+		uint8_t _resetPin;
 
 		//Intrinsic 4D Routines
 		void WriteChars(char * charsout);

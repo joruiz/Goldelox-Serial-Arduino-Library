@@ -1,6 +1,9 @@
 /*
-   Goldelox_Serial_4DLib.cpp - Library for 4D Systems Serial Environment.
- */
+    Goldelox_Serial_4DLib.cpp - Library for 4D Systems Serial Environment.
+ 
+ 	Updated by Jonathan Ruiz de Garibay
+	March of 2014
+*/
 
 #include "Goldelox_Serial_4DLib.h"
 
@@ -21,251 +24,9 @@ Goldelox_Serial_4DLib::Goldelox_Serial_4DLib(Stream * virtualPort, uint8_t reset
 void Goldelox_Serial_4DLib::reset()
 {
 	digitalWrite(_resetPin, LOW);
-	delay(100);
+	delay(1);
 	digitalWrite(_resetPin, HIGH);
 	delay(3000);
-}
-//*********************************************************************************************//
-//**********************************Intrinsic 4D Routines**************************************//
-//*********************************************************************************************//
-
-void Goldelox_Serial_4DLib::WriteChars(char * charsout)
-{
-  unsigned char wk ;
-  do
-  {
-    wk = *charsout++ ;
-    _virtualPort->write(wk) ;
-  } while (wk) ;
-}
-
-void Goldelox_Serial_4DLib::WriteBytes(char * Source, int Size)
-{
- 	unsigned char wk ;
-	int i ;
-	for (i = 0; i < Size; i++)
-	{
-		wk = *Source++ ;
-                _virtualPort->write(wk) ;
-	}
-}
-
-void Goldelox_Serial_4DLib::WriteWords(word * Source, int Size)
-{
-  word wk ;
-  int i ;
-  for (i = 0; i < Size; i++)
-  {
-    wk = *Source++ ;
-    _virtualPort->write(wk >> 8) ;
-    _virtualPort->write(wk) ;
-  }
-}
-
-void Goldelox_Serial_4DLib::getbytes(char * data, int size)
-{
-  int read ;
-  unsigned long sttime ;
-  int readc ;
-  readc  = 0 ;
-  sttime = millis() ;
-  while ((readc != size) && (millis() - sttime < TimeLimit4D))
-  {
-    if(_virtualPort->available()) 
-    {
-      data[readc++] = _virtualPort->read() ;
-    }
-  }
-  if (readc != size)
-  {
-    Error4D = Err4D_Timeout ;
-    if (Callback4D != NULL)
-      Callback4D(Error4D, Error4D_Inv) ;
-  }
-}
-
-void Goldelox_Serial_4DLib::GetAck(void)
-{
-  int read ;
-  unsigned char readx ;
-  unsigned long sttime ;
-  Error4D = Err4D_OK ;
-  sttime  = millis();
-  read    = 0 ;
-  while ((read != 1) && (millis() - sttime < TimeLimit4D))
-  {
-    if(_virtualPort->available() != 0) 
-    {
-      readx = _virtualPort->read() ;
-      read = 1 ;
-    }
-  }
-  if (read == 0)
-  {
-    Error4D = Err4D_Timeout ;
-    if (Callback4D != NULL)
-      Callback4D(Error4D, Error4D_Inv) ;
-  }
-  else if (readx != 6)
-  {
-    Error4D     = Err4D_NAK ;
-    Error4D_Inv = readx ;
-    if (Callback4D != NULL)
-      Callback4D(Error4D, Error4D_Inv) ;
-  }
-}
-
-word Goldelox_Serial_4DLib::GetWord(void)
-{
-  unsigned char readx[2] ;
-  int readc ;
-  unsigned long sttime ;
-  
-  if (Error4D != Err4D_OK)
-    return 0 ;
-  sttime   = millis();
-  readc    = 0 ;
-  while ((readc != 2) && (millis() - sttime < TimeLimit4D))
-  {
-    if(_virtualPort->available()) 
-    {
-      readx[readc++] = _virtualPort->read() ;
-    }
-  }
-  
-  if (readc != 2)
-  {
-    Error4D  = Err4D_Timeout ;
-    if (Callback4D != NULL)
-      Callback4D(Error4D, Error4D_Inv) ;
-  return 0 ;
-  }
-  else
-    return readx[0] << 8 | readx[1] ;
-}
-
-void Goldelox_Serial_4DLib::getString(char * outStr, int strLen)
-{
-  unsigned char readx[2] ;
-  int readc ;
-  unsigned long sttime ;
-  
-  if (Error4D != Err4D_OK)
-  {
-    outStr[0] = 0 ;
-    return ;
-  }
-  sttime   = millis();
-  readc    = 0 ;
-  while ((readc != strLen) && (millis() - sttime < TimeLimit4D))
-  {
-    if(_virtualPort->available()) 
-    {
-      outStr[readc++] = _virtualPort->read() ;
-    }
-  }
-  
-  if (readc != strLen)
-  {
-    Error4D  = Err4D_Timeout ;
-    if (Callback4D != NULL)
-      Callback4D(Error4D, Error4D_Inv) ;
-  }
-  outStr[readc] = 0 ;
-}
-
-word Goldelox_Serial_4DLib::GetAckResp(void)
-{
-	GetAck() ;
-	return GetWord() ;
-}
-
-word Goldelox_Serial_4DLib::GetAckRes2Words(word * word1, word * word2)
-{
-	int Result ;
-	GetAck() ;
-	Result = GetWord() ;
-	*word1 = GetWord() ;
-	*word2 = GetWord() ;
-	return Result ;
-}
-
-void Goldelox_Serial_4DLib::GetAck2Words(word * word1, word * word2)
-{
-	GetAck() ;
-	*word1 = GetWord() ;
-	*word2 = GetWord() ;
-}
-
-word Goldelox_Serial_4DLib::GetAckResStr(char * OutStr)
-{
-	int Result ;
-	GetAck() ;
-	Result = GetWord() ;
-	getString(OutStr, Result) ;
-	return Result ;
-}
-/*
-word Goldelox_Serial_4DLib::GetAckResData(t4DByteArray OutData, word size)
-{
-	int Result ;
-	GetAck() ;
-	Result = GetWord() ;
-	getbytes(OutData, size) ;
-	return Result ;
-}
-*/
-void Goldelox_Serial_4DLib::SetThisBaudrate(int Newrate)
-{
-  int br ;
-  _virtualPort->flush() ;
-//  _virtualPort->end() ;
-  switch(Newrate)
-  {
- /*   case BAUD_110    : br = 110 ;
-      break ;
-    case BAUD_300    : br = 300 ;
-      break ;
-    case BAUD_600    : br = 600 ;
-      break ;
-    case BAUD_1200   : br = 1200 ;
-      break ;
-    case BAUD_2400   : br = 2400 ;
-      break ;
-    case BAUD_4800   : br = 4800 ;
-      break ;*/
-    case BAUD_9600   : br = 9600 ;
-      break ;
-//   case BAUD_14400  : br = 14400 ;
-//      break ;
-    case BAUD_19200  : br = 19200 ;
-      break ;
- /*   case BAUD_31250  : br = 31250 ;
-      break ;
-    case BAUD_38400  : br = 38400 ;
-      break ;
-    case BAUD_56000  : br = 56000 ;
-      break ;
-    case BAUD_57600  : br = 57600 ;
-      break ;
-    case BAUD_115200 : br = 115200 ;
-      break ;
-    case BAUD_128000 : br = 133928 ; // actual rate is not 128000 ;
-      break ;
-    case BAUD_256000 : br = 281250 ; // actual rate is not  256000 ;
-      break ;
-    case BAUD_300000 : br = 312500 ; // actual rate is not  300000 ;
-      break ;
-    case BAUD_375000 : br = 401785 ; // actual rate is not  375000 ;
-      break ;
-    case BAUD_500000 : br = 562500 ; // actual rate is not  500000 ;
-      break ;
-    case BAUD_600000 : br = 703125 ; // actual rate is not  600000 ;
-      break ;*/
-  }
-//  _virtualPort->begin(br) ;
-  delay(50) ; // Display sleeps for 100
-  _virtualPort->flush() ;
 }
 
 //*********************************************************************************************//
@@ -585,7 +346,7 @@ void Goldelox_Serial_4DLib::gfx_TransparentColour(word  Color)
   GetAck() ;
 }
 
-void Goldelox_Serial_4DLib::gfx_Triangle(word  X1, word  Y1, word  X2, word  Y2, word  X3, word  Y3, word  Color)
+void Goldelox_Serial_4DLib::gfx_Triangle(word X1, word Y1, word X2, word  Y2, word  X3, word  Y3, word  Color)
 {
   _virtualPort->print((char)(F_gfx_Triangle >> 8)) ;
   _virtualPort->print((char)(F_gfx_Triangle)) ;
@@ -919,8 +680,8 @@ void Goldelox_Serial_4DLib::setbaudWait(word  Newrate)
   _virtualPort->print((char)(F_setbaudWait)) ;
   _virtualPort->print((char)(Newrate >> 8)) ;
   _virtualPort->print((char)(Newrate)) ;
-  SetThisBaudrate(Newrate) ; // change this systems baud rate to match new display rate, ACK is 100ms away
-  GetAck() ;
+//  SetThisBaudrate(Newrate) ; // change this systems baud rate to match new display rate, ACK is 100ms away
+//  GetAck() ;
 }
 
 word Goldelox_Serial_4DLib::peekW(word  Address)
@@ -996,3 +757,238 @@ void Goldelox_Serial_4DLib::SSMode(word  Parm)
   _virtualPort->print((char)(Parm)) ;
   GetAck() ;
 }
+
+//*********************************************************************************************//
+//**********************************Intrinsic 4D Routines**************************************//
+//*********************************************************************************************//
+
+void Goldelox_Serial_4DLib::WriteChars(char * charsout)
+{
+  unsigned char wk ;
+  do
+  {
+    wk = *charsout++ ;
+    _virtualPort->write(wk) ;
+  } while (wk) ;
+}
+
+void Goldelox_Serial_4DLib::WriteBytes(char * Source, int Size)
+{
+ 	unsigned char wk ;
+	int i ;
+	for (i = 0; i < Size; i++)
+	{
+		wk = *Source++ ;
+                _virtualPort->write(wk) ;
+	}
+}
+
+void Goldelox_Serial_4DLib::WriteWords(word * Source, int Size)
+{
+  word wk ;
+  int i ;
+  for (i = 0; i < Size; i++)
+  {
+    wk = *Source++ ;
+    _virtualPort->write(wk >> 8) ;
+    _virtualPort->write(wk) ;
+  }
+}
+
+void Goldelox_Serial_4DLib::getbytes(char * data, int size)
+{
+  int read ;
+  unsigned long sttime ;
+  int readc ;
+  readc  = 0 ;
+  sttime = millis() ;
+  while ((readc != size) && (millis() - sttime < TimeLimit4D))
+  {
+    if(_virtualPort->available()) 
+    {
+      data[readc++] = _virtualPort->read() ;
+    }
+  }
+  if (readc != size)
+  {
+    Error4D = Err4D_Timeout ;
+    if (Callback4D != NULL)
+      Callback4D(Error4D, Error4D_Inv) ;
+  }
+}
+
+void Goldelox_Serial_4DLib::GetAck(void)
+{
+  int read ;
+  unsigned char readx ;
+  unsigned long sttime ;
+  Error4D = Err4D_OK ;
+  sttime  = millis();
+  read    = 0 ;
+  while ((read != 1) && (millis() - sttime < TimeLimit4D))
+  {
+    if(_virtualPort->available() != 0) 
+    {
+      readx = _virtualPort->read() ;
+      read = 1 ;
+    }
+  }
+  if (read == 0)
+  {
+    Error4D = Err4D_Timeout ;
+    if (Callback4D != NULL)
+      Callback4D(Error4D, Error4D_Inv) ;
+  }
+  else if (readx != 6)
+  {
+    Error4D     = Err4D_NAK ;
+    Error4D_Inv = readx ;
+    if (Callback4D != NULL)
+      Callback4D(Error4D, Error4D_Inv) ;
+  }
+}
+
+word Goldelox_Serial_4DLib::GetWord(void)
+{
+  unsigned char readx[2] ;
+  int readc ;
+  unsigned long sttime ;
+  
+  if (Error4D != Err4D_OK)
+    return 0 ;
+  sttime   = millis();
+  readc    = 0 ;
+  while ((readc != 2) && (millis() - sttime < TimeLimit4D))
+  {
+    if(_virtualPort->available()) 
+    {
+      readx[readc++] = _virtualPort->read() ;
+    }
+  }
+  
+  if (readc != 2)
+  {
+    Error4D  = Err4D_Timeout ;
+    if (Callback4D != NULL)
+      Callback4D(Error4D, Error4D_Inv) ;
+  return 0 ;
+  }
+  else
+    return readx[0] << 8 | readx[1] ;
+}
+
+void Goldelox_Serial_4DLib::getString(char * outStr, int strLen)
+{
+  unsigned char readx[2] ;
+  int readc ;
+  unsigned long sttime ;
+  
+  if (Error4D != Err4D_OK)
+  {
+    outStr[0] = 0 ;
+    return ;
+  }
+  sttime   = millis();
+  readc    = 0 ;
+  while ((readc != strLen) && (millis() - sttime < TimeLimit4D))
+  {
+    if(_virtualPort->available()) 
+    {
+      outStr[readc++] = _virtualPort->read() ;
+    }
+  }
+  
+  if (readc != strLen)
+  {
+    Error4D  = Err4D_Timeout ;
+    if (Callback4D != NULL)
+      Callback4D(Error4D, Error4D_Inv) ;
+  }
+  outStr[readc] = 0 ;
+}
+
+word Goldelox_Serial_4DLib::GetAckResp(void)
+{
+	GetAck() ;
+	return GetWord() ;
+}
+
+word Goldelox_Serial_4DLib::GetAckRes2Words(word * word1, word * word2)
+{
+	int Result ;
+	GetAck() ;
+	Result = GetWord() ;
+	*word1 = GetWord() ;
+	*word2 = GetWord() ;
+	return Result ;
+}
+
+void Goldelox_Serial_4DLib::GetAck2Words(word * word1, word * word2)
+{
+	GetAck() ;
+	*word1 = GetWord() ;
+	*word2 = GetWord() ;
+}
+
+word Goldelox_Serial_4DLib::GetAckResStr(char * OutStr)
+{
+	int Result ;
+	GetAck() ;
+	Result = GetWord() ;
+	getString(OutStr, Result) ;
+	return Result ;
+}
+
+void Goldelox_Serial_4DLib::SetThisBaudrate(int Newrate)
+{
+  int br ;
+  _virtualPort->flush() ;
+//  _virtualPort->end() ;
+  switch(Newrate)
+  {
+ /*   case BAUD_110    : br = 110 ;
+      break ;
+    case BAUD_300    : br = 300 ;
+      break ;
+    case BAUD_600    : br = 600 ;
+      break ;
+    case BAUD_1200   : br = 1200 ;
+      break ;
+    case BAUD_2400   : br = 2400 ;
+      break ;
+    case BAUD_4800   : br = 4800 ;
+      break ;*/
+    case BAUD_9600   : br = 9600 ;
+      break ;
+//   case BAUD_14400  : br = 14400 ;
+//      break ;
+    case BAUD_19200  : br = 19200 ;
+      break ;
+ /*   case BAUD_31250  : br = 31250 ;
+      break ;
+    case BAUD_38400  : br = 38400 ;
+      break ;
+    case BAUD_56000  : br = 56000 ;
+      break ;
+    case BAUD_57600  : br = 57600 ;
+      break ;
+    case BAUD_115200 : br = 115200 ;
+      break ;
+    case BAUD_128000 : br = 133928 ; // actual rate is not 128000 ;
+      break ;
+    case BAUD_256000 : br = 281250 ; // actual rate is not  256000 ;
+      break ;
+    case BAUD_300000 : br = 312500 ; // actual rate is not  300000 ;
+      break ;
+    case BAUD_375000 : br = 401785 ; // actual rate is not  375000 ;
+      break ;
+    case BAUD_500000 : br = 562500 ; // actual rate is not  500000 ;
+      break ;
+    case BAUD_600000 : br = 703125 ; // actual rate is not  600000 ;
+      break ;*/
+  }
+  //_virtualPort->begin(br) ;
+  delay(50) ; // Display sleeps for 100
+  _virtualPort->flush() ;
+}
+

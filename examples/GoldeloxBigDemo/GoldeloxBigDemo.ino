@@ -4,6 +4,9 @@
 /*                                                                                           */
 /*  Date:            31 December 2012                                                        */
 /*                                                                                           */
+/*                   Updated by Jonathan Ruiz de Garibay                                     */
+/*                   March 2014                                                              */
+/*                                                                                           */
 /*  Description:     Demonstrates Pretty much every 4D Serial command.                       */
 /*                   This has been tested on an Arduino Duemilanove ATmega328 using Arduino  */
 /*                   1.0.2                                                                   */
@@ -20,16 +23,16 @@
 /*                                                                                           */
 /*                   Define the serial port to use here, if using software serial set it to  */
 /*                   something like SerialS.                                                 */
-  #define DisplaySerial SerialS
+#define DisplaySerial Serial
 /*                                                                                           */
 /*                   To use SoftwareSerial uncomment the following and set the pins you are  */
 /*                   using correctly                                                         */
-#include <SoftwareSerial.h>
-SoftwareSerial DisplaySerial(3,4) ; // pin 2 = TX of display, pin3 = RX
+//#include <SoftwareSerial.h>
+//SoftwareSerial DisplaySerial(2,3) ; // pin 2 = TX of display, pin3 = RX
 /*                                                                                           */
 /*                   If you are not using hardware serial on pins 0 and 1 you can use this   */
 /*                   hardware port for logging messages. To do this uncomment the following  */
-#define LOG_MESSAGES
+//#define LOG_MESSAGES
 /*                                                                                           */
 /*                   The 4Display Shield has its joystick connected directly to Arduino      */
 /*                   Digital pins 2-6. If you are using the 4D Arduino Adapter, and/or have  */
@@ -60,16 +63,16 @@ SoftwareSerial DisplaySerial(3,4) ; // pin 2 = TX of display, pin3 = RX
 /*                   statements so it becomes:-                                              */
 /*                                                                                           */
 /*                   void SoftwareSerial::setTX(uint8_t tx)                                  */
-/*                   {                                                                       */  
+/*                   {                                                                       */
 /*                     pinMode(tx, INPUT_PULLUP);                                            */
-/*                     pinMode(tx, OUTPUT);                                                  */ 
+/*                     pinMode(tx, OUTPUT);                                                  */
 /*                                                                                           */
 /*********************************************************************************************/
 
 #ifdef LOG_MESSAGES
-  #define HWLOGGING Serial
+#define HWLOGGING Serial
 #else
-  #define HWLOGGING if (1) {} else Serial
+#define HWLOGGING if (1) {} else Serial
 #endif
 
 #include "Goldelox_Serial_4DLib.h"
@@ -88,46 +91,66 @@ void SetThisBaudrate(int Newrate)
   DisplaySerial.end() ;
   switch(Newrate)
   {
-    case BAUD_110    : br = 110 ;
-      break ;
-    case BAUD_300    : br = 300 ;
-      break ;
-    case BAUD_600    : br = 600 ;
-      break ;
-    case BAUD_1200   : br = 1200 ;
-      break ;
-    case BAUD_2400   : br = 2400 ;
-      break ;
-    case BAUD_4800   : br = 4800 ;
-      break ;
-    case BAUD_9600   : br = 9600 ;
-      break ;
-    case BAUD_14400  : br = 14400 ;
-      break ;
-    case BAUD_19200  : br = 19200 ;
-      break ;
-    case BAUD_31250  : br = 31250 ;
-      break ;
-    case BAUD_38400  : br = 38400 ;
-      break ;
-    case BAUD_56000  : br = 56000 ;
-      break ;
-    case BAUD_57600  : br = 57600 ;
-      break ;
-    case BAUD_115200 : br = 115200 ;
-      break ;
-    case BAUD_128000 : br = 133928 ; // actual rate is not 128000 ;
-      break ;
-    case BAUD_256000 : br = 281250 ; // actual rate is not  256000 ;
-      break ;
-    case BAUD_300000 : br = 312500 ; // actual rate is not  300000 ;
-      break ;
-    case BAUD_375000 : br = 401785 ; // actual rate is not  375000 ;
-      break ;
-    case BAUD_500000 : br = 562500 ; // actual rate is not  500000 ;
-      break ;
-    case BAUD_600000 : br = 703125 ; // actual rate is not  600000 ;
-      break ;
+  case BAUD_110    : 
+    br = 110 ;
+    break ;
+  case BAUD_300    : 
+    br = 300 ;
+    break ;
+  case BAUD_600    : 
+    br = 600 ;
+    break ;
+  case BAUD_1200   : 
+    br = 1200 ;
+    break ;
+  case BAUD_2400   : 
+    br = 2400 ;
+    break ;
+  case BAUD_4800   : 
+    br = 4800 ;
+    break ;
+  case BAUD_9600   : 
+    br = 9600 ;
+    break ;
+  case BAUD_14400  : 
+    br = 14400 ;
+    break ;
+  case BAUD_19200  : 
+    br = 19200 ;
+    break ;
+  case BAUD_31250  : 
+    br = 31250 ;
+    break ;
+  case BAUD_38400  : 
+    br = 38400 ;
+    break ;
+  case BAUD_56000  : 
+    br = 56000 ;
+    break ;
+  case BAUD_57600  : 
+    br = 57600 ;
+    break ;
+  case BAUD_115200 : 
+    br = 115200 ;
+    break ;
+  case BAUD_128000 : 
+    br = 133928 ; // actual rate is not 128000 ;
+    break ;
+  case BAUD_256000 : 
+    br = 281250 ; // actual rate is not  256000 ;
+    break ;
+  case BAUD_300000 : 
+    br = 312500 ; // actual rate is not  300000 ;
+    break ;
+  case BAUD_375000 : 
+    br = 401785 ; // actual rate is not  375000 ;
+    break ;
+  case BAUD_500000 : 
+    br = 562500 ; // actual rate is not  500000 ;
+    break ;
+  case BAUD_600000 : 
+    br = 703125 ; // actual rate is not  600000 ;
+    break ;
   }
   DisplaySerial.begin(br) ;
   delay(50) ; // Display sleeps for 100
@@ -155,7 +178,7 @@ int trymount(void)
   {
     Display.putstr("Pls insert uSD crd\n") ;
     while (   (!i)
-          && (j < retries) )
+      && (j < retries) )
     {
       Display.putstr(".") ;
       i = Display.media_Init() ;
@@ -241,33 +264,51 @@ void gfx_Part2(void)
     Display.gfx_Circle(orbitx , orbity, k, BLUE);
     i += 30;   // each 30 degreees
   }
-  
+
   Display.gfx_OutlineColour(YELLOW) ;
   Display.gfx_RectangleFilled(80,10,95,60,LIME) ;
   Display.gfx_OutlineColour(0) ;                    // turn outline off
-  
+
   delay(1000) ;
   Display.gfx_Cls() ;
   Display.putstr("gfx_P - gfx_P") ;
   HWLOGGING.println(F("gfx_P to gfx_P")) ;
-  vx[0] = 18;   vy[0] = 55;
-  vx[1] = 18;   vy[1] = 40;
-  vx[2] = 25;   vy[2] = 40;
-  vx[3] = 25;   vy[3] = 55;
-  vx[4] = 46;   vy[4] = 63;
-  vx[5] = 55;   vy[5] = 39;
-  vx[6] = 64;   vy[6] = 63;
-  vx[7] = 46;   vy[7] = 29;
-  vx[8] = 55;   vy[8] = 35;
-  vx[9] = 64;   vy[9] = 29;
-  vx[10] = 80; vy[10] = 25;
-  vx[11] = 80; vy[11] = 39;
-  vx[12] = 70; vy[12] = 49;
-  vx[13] = 90; vy[13] = 49;
-  vx[14] = 80; vy[14] = 39;
-  vx[15] = 71; vy[15] = 29;
-  vx[16] = 80; vy[16] = 35;
-  vx[17] = 89; vy[17] = 29;
+  vx[0] = 18;   
+  vy[0] = 55;
+  vx[1] = 18;   
+  vy[1] = 40;
+  vx[2] = 25;   
+  vy[2] = 40;
+  vx[3] = 25;   
+  vy[3] = 55;
+  vx[4] = 46;   
+  vy[4] = 63;
+  vx[5] = 55;   
+  vy[5] = 39;
+  vx[6] = 64;   
+  vy[6] = 63;
+  vx[7] = 46;   
+  vy[7] = 29;
+  vx[8] = 55;   
+  vy[8] = 35;
+  vx[9] = 64;   
+  vy[9] = 29;
+  vx[10] = 80; 
+  vy[10] = 25;
+  vx[11] = 80; 
+  vy[11] = 39;
+  vx[12] = 70; 
+  vy[12] = 49;
+  vx[13] = 90; 
+  vy[13] = 49;
+  vx[14] = 80; 
+  vy[14] = 39;
+  vx[15] = 71; 
+  vy[15] = 29;
+  vx[16] = 80; 
+  vy[16] = 35;
+  vx[17] = 89; 
+  vy[17] = 29;
   // house
   Display.gfx_Rectangle(3,25,33,55,RED);             // frame
   Display.gfx_Triangle(3,25,18,4,33,25,YELLOW);      // roof
@@ -288,19 +329,26 @@ void gfx_Part2(void)
   Display.gfx_Cls() ;
   Display.putstr("gfx_P - gfx_T") ;
   HWLOGGING.println(F("gfx_P to gfx_T")) ;
-  vx[0] = 45; vy[0] = 20;
-  vx[1] = 55; vy[1] = 10;
-  vx[2] = 95; vy[2] = 20;
-  vx[3] = 60; vy[3] = 25;
-  vx[4] = 95; vy[4] = 30;
-  vx[5] = 55; vy[5] = 40;
-  vx[6] = 45; vy[6] = 30;
+  vx[0] = 45; 
+  vy[0] = 20;
+  vx[1] = 55; 
+  vy[1] = 10;
+  vx[2] = 95; 
+  vy[2] = 20;
+  vx[3] = 60; 
+  vy[3] = 25;
+  vx[4] = 95; 
+  vy[4] = 30;
+  vx[5] = 55; 
+  vy[5] = 40;
+  vx[6] = 45; 
+  vy[6] = 30;
   Display.gfx_Polygon(7, vx, vy, RED);
-  
+
   Display.gfx_Rectangle(0,10, 10,60, AQUA) ;
   Display.gfx_RectangleFilled(20,10, 40,60, ORANGE) ;
-//	Display.gfx_ScreenMode(LANDSCAPE) ;
-//	Display.gfx_ScreenMode(PORTRAIT) ;
+  //	Display.gfx_ScreenMode(LANDSCAPE) ;
+  //	Display.gfx_ScreenMode(PORTRAIT) ;
   Display.gfx_Transparency(ON) ;
   Display.gfx_TransparentColour(YELLOW) ;  // how do we 'test' this?
   Display.gfx_Triangle(50,60, 70,40, 90,60,YELLOW);
@@ -309,11 +357,11 @@ void gfx_Part2(void)
 void Joystick_Tests(void)
 {
 #ifndef GOLDELOX_JOYSTICK
-  #define DOWNPIN  2
-  #define LEFTPIN  3
-  #define RIGHTPIN 4
-  #define FIREPIN  5
-  #define UPPIN    6
+#define DOWNPIN  2
+#define LEFTPIN  3
+#define RIGHTPIN 4
+#define FIREPIN  5
+#define UPPIN    6
   pinMode(DOWNPIN, INPUT_PULLUP);
   pinMode(LEFTPIN, INPUT_PULLUP);
   pinMode(RIGHTPIN, INPUT_PULLUP);
@@ -351,22 +399,28 @@ void Joystick_Tests(void)
       Display.txt_MoveCursor(5,3) ;
       switch (i)
       {
-        case RELEASED : Display.putstr("Released") ;
-          break ;
-        case UP       : Display.putstr("   Up   ") ;
-          break ;
-        case LEFT     : Display.putstr("  Left  ") ;
-          break ;
-        case DOWN     : Display.putstr("  Down  ") ;
-          break ;
-        case RIGHT    : Display.putstr("  Right ") ;
-          break ;
-        case FIRE     : Display.putstr("  Fire  ") ;
-          break ;
+      case RELEASED : 
+        Display.putstr("Released") ;
+        break ;
+      case UP       : 
+        Display.putstr("   Up   ") ;
+        break ;
+      case LEFT     : 
+        Display.putstr("  Left  ") ;
+        break ;
+      case DOWN     : 
+        Display.putstr("  Down  ") ;
+        break ;
+      case RIGHT    : 
+        Display.putstr("  Right ") ;
+        break ;
+      case FIRE     : 
+        Display.putstr("  Fire  ") ;
+        break ;
       }
     }
   }
-  
+
   Display.txt_FGcolour(LIME) ;
 }
 
@@ -375,7 +429,7 @@ void text_Tests(void)
   Display.gfx_Cls() ;
   HWLOGGING.println(F("Text Tests")) ;
   Display.putstr("Text Tests") ;
-  
+
   Display.txt_Attributes(BOLD + INVERSE + ITALIC + UNDERLINED) ;
   Display.txt_Xgap(3) ;
   Display.txt_Ygap(3) ;
@@ -384,7 +438,7 @@ void text_Tests(void)
   Display.txt_FontID(SYSTEM) ;
   Display.txt_MoveCursor(2, 0) ;
   Display.putstr("Hello Pingajo") ;
-  
+
   Display.txt_MoveCursor(4, 1) ;
   Display.txt_Height(2) ;
   Display.txt_Width(1) ;
@@ -441,8 +495,8 @@ void Image_Tests(void)
   char * Source ;
   int i, j, k, l ;
   Display.gfx_Cls() ;
-// The following statement would work if Image were in RAM, but it isn't and it can't be on the Arduino it was written on, so we need to do it another way
-//  Display.blitComtoDisplay(0, 0, Image[1], Image[3], (char *)&Image[6]) ;
+  // The following statement would work if Image were in RAM, but it isn't and it can't be on the Arduino it was written on, so we need to do it another way
+  //  Display.blitComtoDisplay(0, 0, Image[1], Image[3], (char *)&Image[6]) ;
 
   DisplaySerial.print((char)(F_blitComtoDisplay >> 8)) ;
   DisplaySerial.print((char)(F_blitComtoDisplay)) ;
@@ -454,7 +508,7 @@ void Image_Tests(void)
   DisplaySerial.print((char)(Image[1])) ;           // Width low
   DisplaySerial.print((char)(Image[2])) ;           // Hight High
   DisplaySerial.print((char)(Image[3])) ;           // Height low  
-  
+
   i = Image[1] * Image[3] * 2 ;                     // calculate image size, this assumes the width and height are only 1 byte
   k = 6 ;  // image starts at offset 6
   while (i != 0)
@@ -475,7 +529,9 @@ void Image_Tests(void)
 void Callback(int ErrCode, unsigned char ErrByte)
 {
 #ifdef LOG_MESSAGES
-  const char *Error4DText[] = {"OK\0", "Timeout\0", "NAK\0", "Length\0", "Invalid\0"} ;
+  const char *Error4DText[] = {
+    "OK\0", "Timeout\0", "NAK\0", "Length\0", "Invalid\0"  } 
+  ;
   HWLOGGING.print(F("Serial 4D Library reports error ")) ;
   HWLOGGING.print(Error4DText[ErrCode]) ;
 
@@ -488,7 +544,7 @@ void Callback(int ErrCode, unsigned char ErrByte)
     HWLOGGING.println(F("")) ;
   while(1) ; // you can return here, or you can loop
 #else
-// Pin 13 has an LED connected on most Arduino boards. Just give it a name
+  // Pin 13 has an LED connected on most Arduino boards. Just give it a name
 #define led 13
   while(1)
   {
@@ -512,9 +568,9 @@ void loop()
 {
   int i, rc ;
   char wks[20] ;
-  
+
   Display.reset();
-  
+
   Display.TimeLimit4D   = 5000 ; // 2 second timeout on all commands
   Display.Callback4D = Callback ; // NULL ;
   DisplaySerial.begin(9600) ;
@@ -535,35 +591,37 @@ void loop()
     HWLOGGING.println(F("Media tests will be done\n")) ;
   else
     HWLOGGING.println(F("Media tests cannot be done, missing uSD card\n")) ;
-  
+
   delay(5000) ;
-  
+
   gfx_Part1() ; // GFX Part 1 tests
   delay(5000) ;
-  
+
   gfx_Part2() ; // GFX Part 2 tests
   delay(5000) ;
-  
+
   text_Tests() ; // text tests
   delay(5000) ;
-  
+
+#ifdef GOLDELOX_JOYSTICK  
   Joystick_Tests() ;
   delay(5000) ;
-  
+#endif
+
   Image_Tests() ;
   delay(5000) ;
-  
+
   if (fmediatests)
   {
     Media_Tests() ;
     delay(5000) ;
   }
 
-//  Display.SSTimeout(1000) ;
-//  Display.SSSpeed(1) ;
-//  Display.SSMode(0) ;
+  //  Display.SSTimeout(1000) ;
+  //  Display.SSSpeed(1) ;
+  //  Display.SSMode(0) ;
 
-//Display.BeeP(40,2000) ;
+  //Display.BeeP(40,2000) ;
   Display.gfx_Cls() ;
   setbaudWait(BAUD_19200) ;
   Display.putstr("Hi at 19200\n") ;
@@ -571,3 +629,4 @@ void loop()
   Display.putstr("Back to 9600\n") ;
   delay(5000);
 }
+

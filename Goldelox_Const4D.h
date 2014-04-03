@@ -50,26 +50,24 @@
     //----------------------------------
     //   4DGL - GOLDELOX-GFX2 PLATFORM
     //----------------------------------
-
-
 */
+
 /*
     System Primitives for 4DGL GOLDELOX GFX2 Platform
 */
 
-
 //==============================================//
 // initialization table additional commands     //
 //==============================================//
-#define INIT_TABLE_END          0xFF // end of initialization table marker
-#define INIT_TABLE_DELAY        0xFE // insert delay value
-#define INIT_TABLE_16BIT_INDEX_REG_MODE  0xFD // 16 bit display index register
-#define INIT_TABLE_8BIT_INDEX_REG_MODE  0xFC // 8 bit display index register
-#define INIT_TABLE_16BIT_DUMMY_READ  0xFB // 16 bit display dummy read
-#define INIT_TABLE_PORTRAIT     0xFA // initial screen mode requirement
-#define INIT_TABLE_LANDSCAPE    0xF9
-#define INIT_TABLE_PORTRAIT_R   0xF8
-#define INIT_TABLE_LANDSCAPE_R  0xF7
+#define INIT_TABLE_END						0xFF // end of initialization table marker
+#define INIT_TABLE_DELAY					0xFE // insert delay value
+#define INIT_TABLE_16BIT_INDEX_REG_MODE		0xFD // 16 bit display index register
+#define INIT_TABLE_8BIT_INDEX_REG_MODE		0xFC // 8 bit display index register
+#define INIT_TABLE_16BIT_DUMMY_READ			0xFB // 16 bit display dummy read
+#define INIT_TABLE_PORTRAIT					0xFA // initial screen mode requirement
+#define INIT_TABLE_LANDSCAPE				0xF9
+#define INIT_TABLE_PORTRAIT_R				0xF8
+#define INIT_TABLE_LANDSCAPE_R				0xF7
 
 //==============================================//
 // putch, putstr, putnum and print redirection  //
@@ -84,15 +82,14 @@
 // general number formatting constants          //
 // for 'print' and 'putnum'                     //
 //==============================================//
-    // string processing constants
+
+// string processing constants
 #define STR                     0x0080 // display as string
 #define CHR                     0x0081 // display as single char
 
-
-
-  // binary, no leading zeroes
-#define BIN4d                     0x0002 // binary, 16 digits, no leading zeroes
-#define BIN1                    0x0102 // binary, 1 digit, no leading zeroes
+// binary, no leading zeroes
+#define BIN4d					0x0002 // binary, 16 digits, no leading zeroes
+#define BIN1					0x0102 // binary, 1 digit, no leading zeroes
 #define BIN2                    0x0202 // binary, 2 digits, no leading zeroes
 #define BIN3                    0x0302 // binary, 3 digits, no leading zeroes
 #define BIN4                    0x0402 // binary, 4 digits, no leading zeroes
@@ -109,7 +106,7 @@
 #define BIN15                   0x0F02 // binary, 15 digits, no leading zeroes
 #define BIN16                   0x0002 // binary, 16 digits, no leading zeroes
 
-    // binary, with leading zeroes
+// binary, with leading zeroes
 #define BINZ                    0x1002 // binary, 16 digits, leading zeroes
 #define BIN1Z                   0x1102 // binary, 1 digit, leading zeroes
 #define BIN2Z                   0x1202 // binary, 2 digits, leading zeroes
@@ -128,7 +125,7 @@
 #define BIN15Z                  0x1F02 // binary, 15 digits, leading zeroes
 #define BIN16Z                  0x1002 // binary, 16 digits, leading zeroes
 
-    // binary, with leading blanked
+// binary, with leading blanked
 #define BINZB                   0x2002 // binary, 16 digits, leading blanks
 #define BIN1ZB                  0x2102 // binary, 1 digit, leading blanks
 #define BIN2ZB                  0x2202 // binary, 2 digits, leading blanks
@@ -147,7 +144,7 @@
 #define BIN15ZB                 0x2F02 // binary, 15 digits, leading blanks
 #define BIN16ZB                 0x2002 // binary, 16 digits, leading blanks
 
-    // signed decimal, no leading zeroes
+// signed decimal, no leading zeroes
 #define DEC4d                   0x050A // signed decimal, 5 digits, no leading zeroes
 #define DEC1                    0x010A // signed decimal, 1 digit, no leading zeroes
 #define DEC2                    0x020A // signed decimal, 2 digits, no leading zeroes
@@ -155,7 +152,7 @@
 #define DEC4                    0x040A // signed decimal, 4 digits, no leading zeroes
 #define DEC5                    0x050A // signed decimal, 5 digits, no leading zeroes
 
-    // signed decimal, with leading zeroes
+// signed decimal, with leading zeroes
 #define DECZ                    0x150A // signed decimal, 5 digits, leading zeroes
 #define DEC1Z                   0x110A // signed decimal, 1 digit, leading zeroes
 #define DEC2Z                   0x120A // signed decimal, 2 digits, leading zeroes
@@ -163,7 +160,7 @@
 #define DEC4Z                   0x140A // signed decimal, 4 digits, leading zeroes
 #define DEC5Z                   0x150A // signed decimal, 5 digits, leading zeroes
 
-  // signed decimal, leading zeroes blanked
+// signed decimal, leading zeroes blanked
 #define DECZB                   0x250A // signed decimal, 5 digits, leading blanks
 #define DEC1ZB                  0x210A // signed decimal, 1 digit, leading blanks
 #define DEC2ZB                  0x220A // signed decimal, 2 digits, leading blanks
@@ -171,7 +168,7 @@
 #define DEC4ZB                  0x240A // signed decimal, 4 digits, leading blanks
 #define DEC5ZB                  0x250A // signed decimal, 5 digits, leading blanks
 
-    // unsigned decimal, no leading zeroes
+// unsigned decimal, no leading zeroes
 #define UDEC                    0x450A // unsigned decimal, 5 digits, no leading zeroes
 #define UDEC1                   0x410A // unsigned decimal, 1 digit, no leading zeroes
 #define UDEC2                   0x420A // unsigned decimal, 2 digits, no leading zeroes
@@ -179,7 +176,7 @@
 #define UDEC4                   0x440A // unsigned decimal, 4 digits, no leading zeroes
 #define UDEC5                   0x450A // unsigned decimal, 5 digits, no leading zeroes
 
-    // unsigned decimal, with leading zero's
+// unsigned decimal, with leading zero's
 #define UDECZ                   0x550A // unsigned decimal, 5 digits, leading zeroes
 #define UDEC1Z                  0x510A // unsigned decimal, 1 digit, leading zeroes
 #define UDEC2Z                  0x520A // unsigned decimal, 2 digits, leading zeroes
@@ -187,7 +184,7 @@
 #define UDEC4Z                  0x540A // unsigned decimal, 4 digits, leading zeroes
 #define UDEC5Z                  0x550A // unsigned decimal, 5 digits, leading zeroes
 
-    // unsigned decimal, leading zeroes blanked
+// unsigned decimal, leading zeroes blanked
 #define UDECZB                  0x650A // unsigned decimal, 5 digits, leading blanks
 #define UDEC1ZB                 0x610A // unsigned decimal, 1 digit, leading blanks
 #define UDEC2ZB                 0x620A // unsigned decimal, 2 digits, leading blanks
@@ -195,21 +192,21 @@
 #define UDEC4ZB                 0x640A // unsigned decimal, 4 digits, leading blanks
 #define UDEC5ZB                 0x650A // unsigned decimal, 5 digits, leading blanks
 
-    // hex, with leading zero's
+// hex, with leading zero's
 #define HEX4d                   0x1410 // hex, 4 digits, leading zeroes
 #define HEX1                    0x1110 // hex, 1 digit, leading zeroes
 #define HEX2                    0x1210 // hex, 2 digits, leading zeroes
 #define HEX3                    0x1310 // hex, 3 digits, leading zeroes
 #define HEX4                    0x1410 // hex, 4 digits, leading zeroes
 
-    // hex, no leading zero's
+// hex, no leading zero's
 #define HEXZ                    0x0410 // hex, 4 digits, no leading zeroes
 #define HEX1Z                   0x0110 // hex, 1 digit, no leading zeroes
 #define HEX2Z                   0x0210 // hex, 2 digits, no leading zeroes
 #define HEX3Z                   0x0310 // hex, 3 digits, no leading zeroes
 #define HEX4Z                   0x0410 // hex, 4 digits, no leading zeroes
 
-    // hex, leading zero's blanked
+// hex, leading zero's blanked
 #define HEXZB                   0x2410 // hex, 4 digits, leading blanks
 #define HEX1ZB                  0x2110 // hex, 1 digit, leading blanks
 #define HEX2ZB                  0x2210 // hex, 2 digits, leading blanks
@@ -238,7 +235,6 @@
 #define BAUD_375000             8
 #define BAUD_500000             6
 #define BAUD_600000             4
-
 
 //==============================================//
 // generic constants                            //
@@ -303,7 +299,6 @@
 #define LINE_PATTERN            10 // used for patterned lines, 16bit value (0 = no pattern)
 #define COLOUR_MODE             11 // select 8 or 16 bit colour mode
 
-
 #define SOLID                   0 // PEN_SIZE argument  (gfx_Set legacy mode)
 #define OUTLINE                 1 // PEN_SIZE argument  (gfx_Set legacy mode)
 
@@ -339,7 +334,6 @@
 #define SYSTEM                  0 // internal system font
 #define MEDIA                   7 // font is at uSD_add
 
-
 #define TRANSPARENT             0 // TEXT_OPACITY  transparent  text
 #define OPAQUE                  1 // TEXT_OPACITY  opaque text
 
@@ -347,7 +341,6 @@
 #define ITALIC                  32 // TEXT_ATTRIBUTES italic text (auto reset)
 #define INVERSE                 64 // TEXT_ATTRIBUTES inverse text (auto reset)
 #define UNDERLINED              128 // TEXT_ATTRIBUTES underlined text (auto reset)
-
 
 //==============================================//
 // Memory MAP                                   //
@@ -388,8 +381,6 @@
 #define GFX_XMAX                159 // current display width-1 determined by portrait / landscape swapping
 #define GFX_YMAX                160 // current display width-1 determined by portrait / landscape swapping
 #define GFX_SCREENMODE          161 // holds current screen mode
-    //
-
 
 //==============================================//
 // system WORD variables accesible with peekW   //
@@ -436,8 +427,8 @@
 #define GFX_TRANSPARENTCOLOUR   121 // image transparency colour
 #define GFX_STRINGMETRIX        122 // low byte = string width, hi byte = string height
 #define GFX_TEMPSTORE1          123 // low byte = last char printed, hi byte = frame timer over-ride
-    // reserved                 124             // internal use
-    // reserved                 125             // internal use
+//reserved						124 // internal use
+//reserved						125 // internal use
 #define SYS_FLAGS1              126 // system control flags word 1
 #define SYS_FLAGS2              127 // system control flags word 2
 
@@ -481,7 +472,6 @@
 #define _DISP16                 0x4000 // 1=display is 16bit interface
 #define _PROPFONT               0x8000 // 1=current font is proportional
 
-
 //==============================================//
 // EVE User Resources                           //
 //==============================================//
@@ -499,9 +489,6 @@
     16 bit RGB (565) Colour Chart
     Original work by 4D Forum Member: skadoo
 */
-
-
-
 #define ALICEBLUE               0xF7DF
 #define ANTIQUEWHITE            0xFF5A
 #define AQUA                    0x07FF
@@ -642,13 +629,3 @@
 #define WHITESMOKE              0xF7BE
 #define YELLOW                  0xFFE0
 #define YELLOWGREEN             0x9E66
-
-
-
-
-
-
-
-
-
-

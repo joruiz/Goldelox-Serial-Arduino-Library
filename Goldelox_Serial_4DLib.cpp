@@ -26,7 +26,8 @@ void Goldelox_Serial_4DLib::reset()
 	digitalWrite(_resetPin, LOW);
 	delay(1);
 	digitalWrite(_resetPin, HIGH);
-	delay(3000);
+	delay(2600);
+	gfx_Cls();
 }
 
 //*********************************************************************************************//
